@@ -20,23 +20,29 @@ import {
 } from "../ui/select";
 
 
-import {
-  Drawer,
-  DrawerClose,
-  DrawerContent,
-  DrawerDescription,
-  DrawerFooter,
-  DrawerHeader,
-  DrawerTitle,
-  DrawerTrigger,
-} from "@/components/ui/drawer";
+import { getURL } from "@/utils/getURL";
+import axios from "axios";
+import { useToast } from "@/hooks/use-toast";
+import { useEffect, useState } from "react";
+import { Textarea } from "../ui/textarea";
 
 type DataType = {
   value: string;
   selectValue: String;
 };
 
+
+type responseType = {
+
+    is_error:boolean;
+    message: string;
+    bayt: string;
+
+}
+
 export function MainForm() {
+  const {toast} = useToast();
+  const [isTextArea, setIsTextArea] = useState(false);
 
   const form = useForm<DataType>({
     defaultValues: {
@@ -44,7 +50,29 @@ export function MainForm() {
     },
   });
 
-  function onSubmit(data: DataType) {}
+  async function onSubmit(input: DataType) {
+    const value = input.value;
+    const URL = getURL();
+    const {data}:{data:responseType} = await axios.post(`${URL}/py/verify_input`,{
+    proverb_input: value,
+    is_textarea: isTextArea
+    });
+    
+    if(data.is_error){
+      toast({
+        title: data.message,
+        variant: "destructive"
+      });
+    }
+    else{
+      toast({
+        title: data.message,
+        variant: "default"
+      });
+    }
+  }
+
+
 
   return (
     <Form {...form}>
@@ -60,12 +88,22 @@ export function MainForm() {
           render={({ field }) => (
             <FormItem className="w-full">
               <FormControl>
-                <Input placeholder="Anything in your mind?" {...field} />
+                {
+                  isTextArea ? 
+                  
+                  <Textarea placeholder="Anything in your mind?" {...field}/>
+                  :
+                  <Input placeholder="Anything in your mind?" {...field} />
+                }
               </FormControl>
             </FormItem>
           )}
           />
-          <Button type="submit"><Mic/></Button>
+          <Button  type="button" onClick={()=>setIsTextArea(!isTextArea)}>
+            {
+              isTextArea ? "One line" : "Multiple lines"
+            }
+          </Button>
         </div>
         <div className="flex w-full gap-2">
           <FormField
@@ -90,24 +128,11 @@ export function MainForm() {
               </FormItem>
             )}
           />
-          <Drawer>
-          <Button type="submit" asChild>
-            <DrawerTrigger>
+        
+          <Button type="submit">
               <SendHorizontal/>
-            </DrawerTrigger>
           </Button>
-            <DrawerContent >
-              <DrawerHeader>
-                <DrawerTitle>Did you know this?</DrawerTitle>
-              </DrawerHeader>
-              
-              <DrawerFooter>
-                <DrawerClose>
-                  <Button variant="ghost" className="absolute top-4 right-4"><X/></Button>
-                </DrawerClose>
-              </DrawerFooter>
-            </DrawerContent>
-          </Drawer>
+           
           
         </div>
       </form>
