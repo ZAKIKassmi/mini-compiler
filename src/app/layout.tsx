@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
 import { ThemeProvider } from "@/components/theme/theme-provider";
+import { Toaster } from "@/components/ui/toaster"
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -33,12 +34,12 @@ export default function RootLayout({
       >
         <ThemeProvider
           attribute="class"
-          defaultTheme="light"
-          disableTransitionOnChange
+          defaultTheme="dark"
         >
           <div className="font-[family-name:var(--font-geist-sans)] w-full">
           {children}
           </div>
+          <Toaster />
         </ThemeProvider>
       </body>
     </html>

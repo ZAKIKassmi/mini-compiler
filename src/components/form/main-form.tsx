@@ -4,13 +4,14 @@ import { useForm } from "react-hook-form";
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel } from "../ui/form";
 import { Input } from "../ui/input";
 import { Button } from "../ui/button";
-
+import { useToast } from "@/hooks/use-toast";
 
 type DataType = {
   value: string;
 }
 
 export function MainForm(){
+  const {toast} = useToast();
 
   const form = useForm<DataType>({
     defaultValues: {
@@ -20,8 +21,11 @@ export function MainForm(){
 
 
   function onSubmit(data: DataType){
-      const value = data.value;
-      console.log(value);
+      toast({
+          title: data.value,
+          description: "Any thing went wrong?",
+          duration: 1500
+      });
   }
 
   return(
