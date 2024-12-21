@@ -35,6 +35,6 @@ class Suggestion:
         else:
             return {
                 "message": "no close match found",
-                "accuracy": "0.0",
+                "accuracy": 0,
                 "is_found": False
             }

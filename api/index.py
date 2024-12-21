@@ -21,6 +21,7 @@ class TranslationResponse(BaseModel):
     translation: str
     is_error: bool
     bayt: str
+    closest_match: str
 
 
 
@@ -75,11 +76,23 @@ async def translate_input(req: TranslationRequest) -> TranslationResponse:
                 continue
             compiler_verification = analyze_semantic(line)
             if compiler_verification["is_error"]:
-                return JSONResponse(content=jsonable_encoder({
-                    "is_error": True,
-                    "translation": compiler_verification["message"],
-                    "bayt": line
-                }))
+                suggestion = Suggestion()
+                suggestion_result = suggestion.suggest(line)
+                print(suggestion_result["accuracy"])
+                if suggestion_result["is_found"] and suggestion_result["accuracy"] > 0:
+                    return JSONResponse(content=jsonable_encoder({
+                        "is_error": True,
+                        "translation": compiler_verification["message"],
+                        "bayt": line,
+                        "closest_match": suggestion_result["message"]
+                    }))
+                else:
+                    return JSONResponse(content=jsonable_encoder({
+                        "is_error": True,
+                        "translation": compiler_verification["message"],
+                        "bayt": line,
+                        "closest_match": ""
+                    }))
             res = translation_based_on_language(req.translate_to, line)
             fulltext += res + "\n"
         return JSONResponse(content=jsonable_encoder({

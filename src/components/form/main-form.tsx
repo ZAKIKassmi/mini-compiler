@@ -51,6 +51,8 @@ export function MainForm() {
     useState<boolean>(false);
   const [translationContent, setTranslationContent] = useState<string>("");
   const [showAnimation, setShowAnimation] = useState(false);
+  const [closestMatch, setClosesMatch] = useState(null);
+  const [isOk, setIsOk] = useState(false);
 
   useEffect(() => {
     const isTranslation = value === "2";
@@ -58,7 +60,9 @@ export function MainForm() {
     if (!isTranslation) {
       setShowAnimation(false);
       setTranslationContent("");
+      setClosesMatch(null)
     }
+    setIsOk(false);
   }, [value]);
 
   const form = useForm<DataType>({
@@ -90,12 +94,14 @@ export function MainForm() {
             description: `Found in: ${data.bayt}`,
             variant: "destructive",
           });
+          setIsOk(false);
         } else {
           toast({
             title: data.message,
             description: data.bayt,
             variant: "default",
           });
+          setIsOk(true);
         }
         break;
       case "2":
@@ -105,13 +111,19 @@ export function MainForm() {
             translate_to: language,
           });
           if(data.is_error){
+            setIsOk(false);
             toast({
               title: data.translation,
               variant: "destructive",
               description: `Found: ${data.bayt}`
-            })
+            });
+            if(data.closest_match.length > 0){
+              setClosesMatch(data.closest_match);
+            }
           }
           else{
+            setIsOk(true);
+            setClosesMatch(null);
             setTranslationContent(data.translation);
             setShowAnimation(false);
             requestAnimationFrame(() => setShowAnimation(true));
@@ -123,8 +135,14 @@ export function MainForm() {
           });
         }
         break;
+
+        case "3":
+
+        
+        break;
+
       default:
-        console.log("Hello World");
+        console.log("Hehe");
     }
   }
 
@@ -205,6 +223,20 @@ export function MainForm() {
           </div>
         </form>
       </Form>
+      {
+        closestMatch && isTranslationVisible &&
+        <div className="flex w-full justify-between text-sm">
+          <p>
+            Closest match:
+          </p>
+          <p className="text-green-500">
+            {closestMatch}
+          </p>
+        </div>
+      }
+
+      {
+        isOk &&
 
       <Drawer>
         <DrawerTrigger className="text-muted-foreground text-sm underline hover:text-white/75 duration-200">
@@ -275,6 +307,7 @@ export function MainForm() {
           </div>
         </DrawerContent>
       </Drawer>
+      }
 
       {isTranslationVisible && showAnimation && translationContent && (
         <div className="mt-4 absolute right-4 top-12 h-[90vh] w-[30%] border-white/15 border rounded-xl p-4 bg-[#121212]">

@@ -6,13 +6,14 @@ type Props = {}
 export default function CustomTypeWriter({}: Props) {
   const words = [
     {
-      text: "Welcom,",
+      text: "Welcome,",
     },
     {
       text: "to",
     },
     {
       text: "Poetria.",
+      className: "text-red-500 dark:text-red-500",
     },
     
   ];
