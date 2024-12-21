@@ -18,24 +18,15 @@ import { useEffect, useState } from "react";
 import { Textarea } from "../ui/textarea";
 import { TextGenerateEffect } from "../ui/text-generate-effect";
 import { ScrollArea } from "../ui/scroll-area";
+import { motion, AnimatePresence } from "framer-motion";
 
-import {
-  Drawer,
-  DrawerClose,
-  DrawerContent,
-  DrawerDescription,
-  DrawerHeader,
-  DrawerTitle,
-  DrawerTrigger,
-} from "@/components/ui/drawer";
-import Image from "next/image";
-import { Separator } from "../ui/separator";
-import Link from "next/link";
+import InfoDrawer from "../custom/info-drawer";
 
 type DataType = {
   value: string;
   selectValue: String;
   language: "fr" | "en";
+  theme: string;
 };
 
 type responseType = {
@@ -47,20 +38,24 @@ type responseType = {
 export function MainForm() {
   const { toast } = useToast();
   const [value, setValue] = useState("1");
+  const [theme, setTheme] = useState("1");
   const [isTranslationVisible, setIsTranslationVisible] =
     useState<boolean>(false);
   const [translationContent, setTranslationContent] = useState<string>("");
   const [showAnimation, setShowAnimation] = useState(false);
   const [closestMatch, setClosesMatch] = useState(null);
   const [isOk, setIsOk] = useState(false);
+  const [isSuggestion, setIsSuggestion] = useState(false);
 
   useEffect(() => {
     const isTranslation = value === "2";
+    const isSuggestion = value === "3";
+    setIsSuggestion(isSuggestion);
     setIsTranslationVisible(isTranslation);
     if (!isTranslation) {
       setShowAnimation(false);
       setTranslationContent("");
-      setClosesMatch(null)
+      setClosesMatch(null);
     }
     setIsOk(false);
   }, [value]);
@@ -70,6 +65,7 @@ export function MainForm() {
       value: "",
       selectValue: "1",
       language: "en",
+      theme: "1"
     },
   });
 
@@ -110,18 +106,17 @@ export function MainForm() {
             input: value,
             translate_to: language,
           });
-          if(data.is_error){
+          if (data.is_error) {
             setIsOk(false);
             toast({
               title: data.translation,
               variant: "destructive",
-              description: `Found: ${data.bayt}`
+              description: `Found: ${data.bayt}`,
             });
-            if(data.closest_match.length > 0){
+            if (data.closest_match.length > 0) {
               setClosesMatch(data.closest_match);
             }
-          }
-          else{
+          } else {
             setIsOk(true);
             setClosesMatch(null);
             setTranslationContent(data.translation);
@@ -136,9 +131,7 @@ export function MainForm() {
         }
         break;
 
-        case "3":
-
-        
+      case "3":
         break;
 
       default:
@@ -147,179 +140,216 @@ export function MainForm() {
   }
 
   return (
-    <div className="max-w-[30rem] w-full flex flex-col gap-4">
-      <Form {...form}>
-        <form
-          onSubmit={form.handleSubmit(onSubmit)}
-          className="flex items-center gap-2 flex-col w-full"
-        >
-          <FormField
-            control={form.control}
-            name="value"
-            render={({ field }) => (
-              <FormItem className="w-full">
-                <FormControl>
-                    <Textarea rows={6} placeholder="Anything in your mind?" {...field} />                  
-                </FormControl>
-              </FormItem>
-            )}
-          />
-
-          <div className="flex w-full gap-2">
-            <FormField
-              control={form.control}
-              name="selectValue"
-              render={({ field }) => (
-                <FormItem className="w-full">
-                  <Select
-                    onValueChange={(e) => {
-                      field.onChange(e);
-                      setValue(e);
-                    }}
-                    value={value}
-                  >
-                    <FormControl>
-                      <SelectTrigger className="w-full">
-                        <SelectValue placeholder="Compiler" />
-                      </SelectTrigger>
-                    </FormControl>
-                    <SelectContent>
-                      <SelectItem value="1">Compiler</SelectItem>
-                      <SelectItem value="2">Translator</SelectItem>
-                      <SelectItem value="3">Suggestions</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </FormItem>
+    <>
+      <div className="max-w-[30rem] w-full flex flex-col gap-4">
+        <Form {...form}>
+          <motion.form
+            layout
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.3 }}
+            onSubmit={form.handleSubmit(onSubmit)}
+            className="flex items-center gap-2 flex-col w-full"
+          >
+            <AnimatePresence mode="wait">
+              {!isSuggestion && (
+                <motion.div
+                  key="textarea"
+                  layout
+                  initial={{ opacity: 0, height: 0 }}
+                  animate={{ opacity: 1, height: 'auto' }}
+                  exit={{ opacity: 0, height: 0 }}
+                  transition={{ duration: 0.3 }}
+                  className="w-full"
+                >
+                  <FormField
+                    control={form.control}
+                    name="value"
+                    render={({ field }) => (
+                      <FormItem className="w-full">
+                        <FormControl>
+                          <Textarea
+                            rows={6}
+                            placeholder="Anything in your mind?"
+                            {...field}
+                          />
+                        </FormControl>
+                      </FormItem>
+                    )}
+                  />
+                </motion.div>
               )}
-            />
+            </AnimatePresence>
 
-            {isTranslationVisible && (
+            <div className="flex w-full gap-2">
               <FormField
                 control={form.control}
-                name="language"
+                name="selectValue"
                 render={({ field }) => (
                   <FormItem className="w-full">
                     <Select
-                      onValueChange={field.onChange}
-                      defaultValue={String(field.value)}
+                      onValueChange={(e) => {
+                        field.onChange(e);
+                        setValue(e);
+                      }}
+                      value={value}
                     >
                       <FormControl>
                         <SelectTrigger className="w-full">
-                          <SelectValue placeholder="English" />
+                          <SelectValue placeholder="Compiler" />
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
-                        <SelectItem value="en">English</SelectItem>
-                        <SelectItem value="fr">French</SelectItem>
+                        <SelectItem value="1">Compiler</SelectItem>
+                        <SelectItem value="2">Translator</SelectItem>
+                        <SelectItem value="3">Suggestions</SelectItem>
                       </SelectContent>
                     </Select>
                   </FormItem>
                 )}
               />
-            )}
-            <Button type="submit">
-              <SendHorizontal />
-            </Button>
-          </div>
-        </form>
-      </Form>
-      {
-        closestMatch && isTranslationVisible &&
-        <div className="flex w-full justify-between text-sm">
-          <p>
-            Closest match:
-          </p>
-          <p className="text-green-500">
-            {closestMatch}
-          </p>
-        </div>
-      }
 
-      {
-        isOk &&
+              <AnimatePresence mode="wait">
+                {isTranslationVisible && (
+                  <motion.div
+                    key="language-select"
+                    layout
+                    
+                  >
+                    <FormField
+                      control={form.control}
+                      name="language"
+                      render={({ field }) => (
+                        <FormItem className="w-full">
+                          <Select
+                            onValueChange={field.onChange}
+                            defaultValue={String(field.value)}
+                          >
+                            <FormControl>
+                              <SelectTrigger className="w-36">
+                                <SelectValue placeholder="English" />
+                              </SelectTrigger>
+                            </FormControl>
+                            <SelectContent>
+                              <SelectItem value="en">English</SelectItem>
+                              <SelectItem value="fr">French</SelectItem>
+                            </SelectContent>
+                          </Select>
+                        </FormItem>
+                      )}
+                    />
+                  </motion.div>
+                )}
+              </AnimatePresence>
 
-      <Drawer>
-        <DrawerTrigger className="text-muted-foreground text-sm underline hover:text-white/75 duration-200">
-          Show more information
-        </DrawerTrigger>
-        <DrawerContent className="min-h-[75%]">
-          <DrawerHeader>
-            <DrawerTitle>
-              Abu at-Tayyib Ahmad ibn al-Husayn al-Mutanabbi al-Kindi
-            </DrawerTitle>
-            <DrawerDescription>Abbasid poet</DrawerDescription>
-          </DrawerHeader>
-          <DrawerClose className="absolute right-4 top-4">
-            <Button variant="ghost">
-              <X />
-            </Button>
-          </DrawerClose>
+              <AnimatePresence mode="wait">
+                {isSuggestion && (
+                  <motion.div
+                    key="theme-select"
+                    layout
+                  >
+                    <FormField
+                      control={form.control}
+                      name="theme"
+                      render={({ field }) => (
+                        <FormItem className="w-full">
+                          <Select
+                            onValueChange={(e) => {
+                              field.onChange(e);
+                              setTheme(e);
+                            }}
+                            value={theme}
+                          >
+                            <FormControl>
+                              <SelectTrigger className="w-36">
+                                <SelectValue placeholder="الصبر" />
+                              </SelectTrigger>
+                            </FormControl>
+                            <SelectContent>
+                              <SelectItem value="1">الصبر</SelectItem>
+                              <SelectItem value="2">الصداقة</SelectItem>
+                              <SelectItem value="3">الحب</SelectItem>
+                              <SelectItem value="4">الحرية</SelectItem>
+                              <SelectItem value="5">جود وكرم</SelectItem>
+                            </SelectContent>
+                          </Select>
+                        </FormItem>
+                      )}
+                    />
+                  </motion.div>
+                )}
+              </AnimatePresence>
 
-          <div className="size-full px-24 flex gap-6 mt-8">
-            <div className="w-1/5 aspect-[1/1.21] rounded-xl bg-white overflow-hidden">
-              <Image
-                src="/moutanabi.jpg"
-                width={1000}
-                height={1000}
-                alt="moutanabi image"
-              />
+              <Button type="submit">
+                <SendHorizontal />
+              </Button>
             </div>
-            <div className="w-2/5">
-              <p className="text-black/95 dark:text-white/95">
-                <span className="min-w-12 inline-block">
-                  Born:
-                </span>
-                <span className="text-muted-foreground">Kufa, Iraq</span>
-              </p>
-              <p className="text-black/95 dark:text-white/95">
-                <span className="min-w-12 inline-block">
-                  Died:
-                </span>
-                <span className="text-muted-foreground">
-                  September 23, 965 AD, Numaniyah, Iraq
-                </span>
-              </p>
-              <p className="text-black/95 dark:text-white/95">
-                <span className="min-w-12 inline-block">
-                  Era:
-                </span>
-                <span className="text-muted-foreground">
-                  Islamic Golden Age
-                </span>
-              </p>
-                <Separator className="my-4"/>
-              <div>
-                <p>
-                  <span className="text-muted-foreground">
-                Abū al-Ṭayyib Aḥmad ibn al-Ḥusayn al-Mutanabbī al-Kindī from Kufa, Abbasid Caliphate, was a famous Abbasid-era Arabian poet at the court of the Hamdanid emir Sayf al-Dawla in Aleppo, and for whom he composed 300 folios of poetry. 
-                  </span>
-                <Link href="https://en.wikipedia.org/wiki/Al-Mutanabbi" target="_blank" className="text-blue-400">
-                  <ExternalLink className="w-4 pb-1 ml-1 inline"/>
-                </Link>
-                </p>
-                
-              </div>
+          </motion.form>
+        </Form>
 
-            </div>
-              <div className="w-2/5 rounded-xl">
-                <iframe src="https://www.youtube.com/embed/SWgu48f2rxk" allowFullScreen  className="w-full aspect-video"></iframe>
-              </div>
-          </div>
-        </DrawerContent>
-      </Drawer>
-      }
+        <AnimatePresence>
+          {closestMatch && isTranslationVisible && (
+            <motion.div
+              layout
+              initial={{ opacity: 0, y: -20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -20 }}
+              transition={{ duration: 0.3 }}
+              className="flex w-full justify-between text-sm"
+            >
+              <p>Closest match:</p>
+              <p className="text-green-500">{closestMatch}</p>
+            </motion.div>
+          )}
+        </AnimatePresence>
 
-      {isTranslationVisible && showAnimation && translationContent && (
-        <div className="mt-4 absolute right-4 top-12 h-[90vh] w-[30%] border-white/15 border rounded-xl p-4 bg-[#121212]">
-          <ScrollArea className="w-full h-full">
-            <TextGenerateEffect
-              duration={2}
-              filter={false}
-              words={translationContent}
+        <AnimatePresence>
+          {isTranslationVisible && showAnimation && translationContent && (
+            <motion.div
+              layout
+              initial={{ opacity: 0, x: 100 }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0, x: 100 }}
+              transition={{ duration: 0.4, ease: "easeInOut" }}
+              className="mt-4 absolute right-4 top-12 h-[90vh] w-[30%] dark:border-white/15 border rounded-xl p-4 dark:bg-[#121212] text-black/50 border-black/5 "
+            >
+              <ScrollArea className="w-full h-full">
+                <TextGenerateEffect
+                  duration={2}
+                  filter={false}
+                  words={translationContent}
+                />
+              </ScrollArea>
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </div>
+
+      <AnimatePresence>
+        {isOk && (
+          <motion.div
+            layout
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.9 }}
+            transition={{ duration: 0.3 }}
+          >
+            <InfoDrawer
+              title="Abu at-Tayyib Ahmad ibn al-Husayn al-Mutanabbi al-Kindi"
+              imageSrc="/moutanabi.jpg"
+              imageAlt="moutananbu image"
+              biographyLink="https://en.wikipedia.org/wiki/Al-Mutanabbi"
+              biographyText="Abū al-Ṭayyib Aḥmad ibn al-Ḥusayn al-Mutanabbī al-Kindī from Kufa, Abbasid Caliphate, was a famous Abbasid-era Arabian poet at the court of the Hamdanid emir Sayf al-Dawla in Aleppo, and for whom he composed 300 folios of poetry."
+              videoUrl="https://www.youtube.com/embed/SWgu48f2rxk"
+              metadata={{
+                born: "Kufa, Iraq",
+                died: "September 23, 965 AD, Numaniyah, Iraq",
+                era: "Islamic Golden Age",
+              }}
             />
-          </ScrollArea>
-        </div>
-      )}
-    </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </>
   );
 }

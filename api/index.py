@@ -5,7 +5,7 @@ from fastapi.responses import JSONResponse
 from fastapi.encoders import jsonable_encoder
 from translation import Translation
 from suggestions import Suggestion
-
+from poem_generator import PoemGenerator
 # Initialize FastAPI app
 app = FastAPI()
 
@@ -22,6 +22,9 @@ class TranslationResponse(BaseModel):
     is_error: bool
     bayt: str
     closest_match: str
+
+class poemGeneratorRequest(BaseModel):
+    input: str
 
 
 
@@ -102,4 +105,10 @@ async def translate_input(req: TranslationRequest) -> TranslationResponse:
         }))
 
 
+@app.post("/api/py/generator")
+async def generate_poems(req: poemGeneratorRequest):
+    input = req.input
+    generator = PoemGenerator()
+    res = generator.generate_poem(input)
+    
 
