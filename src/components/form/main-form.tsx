@@ -199,9 +199,8 @@ export function MainForm() {
       </Form>
       
       {isTranslationVisible && showAnimation && translationContent && (
-        <div className="mt-4 absolute right-4 top-12 h-[90vh] w-[30%] border-white/15 border rounded-xl p-4 bg-white/5">
+        <div className="mt-4 absolute right-4 top-12 h-[90vh] w-[30%] border-white/15 border rounded-xl p-4 bg-[#121212]">
           <ScrollArea className="w-full h-full">
-
           <TextGenerateEffect duration={2} filter={false} words={translationContent} />
           </ScrollArea>
         </div>

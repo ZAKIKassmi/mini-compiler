@@ -69,13 +69,12 @@ async def translate_input(req: TranslationRequest) -> TranslationResponse:
         lines = req.input.split("\n")
         for line in lines:
             line = line.strip()
-            print(line)
             if not line:
                 continue
             res = translation_based_on_language(req.translate_to, line)
-            fulltext += res
+            fulltext += res + "\n"
         
-        fulltext = fulltext.replace("?", "\n")
+        # fulltext = fulltext.replace("?", "?\n")
         print(fulltext)
         return JSONResponse(content=jsonable_encoder(fulltext))
     else:
