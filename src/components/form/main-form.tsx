@@ -1,16 +1,10 @@
 "use client";
 
 import { useForm } from "react-hook-form";
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-} from "../ui/form";
+import { Form, FormControl, FormField, FormItem } from "../ui/form";
 import { Input } from "../ui/input";
 import { Button } from "../ui/button";
-import { Mic , SendHorizontal, X} from 'lucide-react';
-
+import { SendHorizontal } from "lucide-react";
 import {
   Select,
   SelectContent,
@@ -18,124 +12,200 @@ import {
   SelectTrigger,
   SelectValue,
 } from "../ui/select";
-
-
 import { getURL } from "@/utils/getURL";
 import axios from "axios";
 import { useToast } from "@/hooks/use-toast";
 import { useEffect, useState } from "react";
 import { Textarea } from "../ui/textarea";
+import { TextGenerateEffect } from "../ui/text-generate-effect";
+import { ScrollArea } from "../ui/scroll-area";
 
 type DataType = {
   value: string;
   selectValue: String;
+  language: "fr" | "en";
 };
 
-
 type responseType = {
-
-    is_error:boolean;
-    message: string;
-    bayt: string;
-
-}
+  is_error: boolean;
+  message: string;
+  bayt: string;
+};
 
 export function MainForm() {
-  const {toast} = useToast();
+  const { toast } = useToast();
   const [isTextArea, setIsTextArea] = useState(false);
+  const [value, setValue] = useState("1");
+  const [isTranslationVisible, setIsTranslationVisible] = useState<boolean>(false);
+  const [translationContent, setTranslationContent] = useState<string>("");
+  const [showAnimation, setShowAnimation] = useState(false);
+
+  useEffect(() => {
+    const isTranslation = value === "2";
+    setIsTranslationVisible(isTranslation);
+    if (!isTranslation) {
+      setShowAnimation(false);
+      setTranslationContent("");
+    }
+  }, [value]);
 
   const form = useForm<DataType>({
     defaultValues: {
       value: "",
+      selectValue: "1",
+      language: "en"
     },
   });
 
   async function onSubmit(input: DataType) {
     const value = input.value;
+    const selectValue = input.selectValue;
+    const language = input.language;
     const URL = getURL();
-    const {data}:{data:responseType} = await axios.post(`${URL}/py/verify_input`,{
-    proverb_input: value,
-    is_textarea: isTextArea
-    });
-    
-    if(data.is_error){
-      toast({
-        title: data.message,
-        variant: "destructive"
-      });
-    }
-    else{
-      toast({
-        title: data.message,
-        variant: "default"
-      });
+
+    switch (selectValue) {
+      case "1":
+        const { data }: { data: responseType } = await axios.post(
+          `${URL}/py/verify_input`,
+          {
+            proverb_input: value,
+            is_textarea: isTextArea,
+          }
+        );
+        
+        if (data.is_error) {
+          toast({
+            title: data.message,
+            description: data.bayt,
+            variant: "destructive",
+          });
+        } else {
+          toast({
+            title: data.message,
+            description: data.bayt,
+            variant: "default",
+          });
+        }
+        break;
+      case "2":
+        try {
+          const { data } = await axios.post(`${URL}/py/translation`, {
+            input: value,
+            is_textarea: isTextArea,
+            translate_to: language,
+          });
+          setTranslationContent(data);
+          setShowAnimation(false);
+          requestAnimationFrame(() => setShowAnimation(true));
+        } catch(e) {
+          toast({
+            title: `${e}`,
+            variant: "destructive"
+          });
+        }
+        break;
+      default:
+        console.log("Hello World");
     }
   }
 
-
-
   return (
-    <Form {...form}>
-      <form
-        onSubmit={form.handleSubmit(onSubmit)}
-        className="max-w-[30rem] w-full flex items-center gap-2 flex-col"
-      >
-        <div className="flex w-full gap-2">
-
-        <FormField
-          control={form.control}
-          name="value"
-          render={({ field }) => (
-            <FormItem className="w-full">
-              <FormControl>
-                {
-                  isTextArea ? 
-                  
-                  <Textarea placeholder="Anything in your mind?" {...field}/>
-                  :
-                  <Input placeholder="Anything in your mind?" {...field} />
-                }
-              </FormControl>
-            </FormItem>
-          )}
-          />
-          <Button  type="button" onClick={()=>setIsTextArea(!isTextArea)}>
-            {
-              isTextArea ? "One line" : "Multiple lines"
-            }
-          </Button>
-        </div>
-        <div className="flex w-full gap-2">
+    <div className="max-w-[30rem] w-full flex">
+      <Form {...form}>
+        <form
+          onSubmit={form.handleSubmit(onSubmit)}
+          className="flex items-center gap-2 flex-col w-full"
+        >
           <FormField
             control={form.control}
-            name="selectValue"
+            name="value"
             render={({ field }) => (
-              <FormItem className="w-full ">
+              <FormItem className="w-full">
                 <FormControl>
-                  <Select>
-                    <SelectTrigger className="w-full">
-                      <SelectValue placeholder="Compiler" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem defaultChecked value="1">
-                        Compiler
-                      </SelectItem>
-                      <SelectItem value="2">Translator</SelectItem>
-                      <SelectItem value="3">Suggestions</SelectItem>
-                    </SelectContent>
-                  </Select>
+                  {isTextArea ? (
+                    <Textarea placeholder="Anything in your mind?" {...field} />
+                  ) : (
+                    <Input placeholder="Anything in your mind?" {...field} />
+                  )}
                 </FormControl>
               </FormItem>
             )}
           />
-        
-          <Button type="submit">
-              <SendHorizontal/>
-          </Button>
-           
-          
+
+          <div className="flex w-full gap-2">
+            <FormField
+              control={form.control}
+              name="selectValue"
+              render={({ field }) => (
+                <FormItem className="w-full">
+                  <Select
+                    onValueChange={(e) => {
+                      field.onChange(e);
+                      setValue(e);
+                    }}
+                    value={value}
+                  >
+                    <FormControl>
+                      <SelectTrigger className="w-full">
+                        <SelectValue placeholder="Compiler" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      <SelectItem value="1">Compiler</SelectItem>
+                      <SelectItem value="2">Translator</SelectItem>
+                      <SelectItem value="3">Suggestions</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </FormItem>
+              )}
+            />
+
+            {isTranslationVisible && (
+              <FormField
+                control={form.control}
+                name="language"
+                render={({ field }) => (
+                  <FormItem className="w-full">
+                    <Select
+                      onValueChange={field.onChange}
+                      defaultValue={String(field.value)}
+                    >
+                      <FormControl>
+                        <SelectTrigger className="w-full">
+                          <SelectValue placeholder="English" />
+                        </SelectTrigger>
+                      </FormControl>
+                      <SelectContent>
+                        <SelectItem value="en">English</SelectItem>
+                        <SelectItem value="fr">French</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </FormItem>
+                )}
+              />
+            )}
+            <Button
+              className="min-w-[120px]"
+              type="button"
+              onClick={() => setIsTextArea(!isTextArea)}
+            >
+              {isTextArea ? "One line" : "Multiple lines"}
+            </Button>
+            <Button type="submit">
+              <SendHorizontal />
+            </Button>
+          </div>
+        </form>
+      </Form>
+      
+      {isTranslationVisible && showAnimation && translationContent && (
+        <div className="mt-4 absolute right-4 top-12 h-[90vh] w-[30%] border-white/15 border rounded-xl p-4 bg-white/5">
+          <ScrollArea className="w-full h-full">
+
+          <TextGenerateEffect duration={2} filter={false} words={translationContent} />
+          </ScrollArea>
         </div>
-      </form>
-    </Form>
+      )}
+    </div>
   );
 }
