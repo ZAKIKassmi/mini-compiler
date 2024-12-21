@@ -4,7 +4,7 @@ from semantic_analyzer import analyze_semantic
 from fastapi.responses import JSONResponse
 from fastapi.encoders import jsonable_encoder
 from translation import Translation
-
+from suggestions import Suggestion
 
 # Initialize FastAPI app
 app = FastAPI()
@@ -21,6 +21,8 @@ class TranslationRequest(BaseModel):
 
 class TranslationResponse(BaseModel):
     translation: str
+
+
 
 
 def translation_based_on_language(lang:str, input:str):
@@ -50,7 +52,11 @@ async def verify_input_endpoint(proverb: ProverbRequest):
               continue
           res = analyze_semantic(line)
           if res["is_error"]:
-              return JSONResponse(content=jsonable_encoder(res))
+              return JSONResponse(content=jsonable_encoder({
+                  "is_error": True,
+                  "message": res["message"],
+                  "bayt": line
+              }))
       
       # If no errors found, return success
       return JSONResponse(content=jsonable_encoder({
@@ -71,11 +77,12 @@ async def translate_input(req: TranslationRequest) -> TranslationResponse:
             line = line.strip()
             if not line:
                 continue
+            compiler_verification = analyze_semantic(line)
+            if compiler_verification["is_error"]:
+                return 
             res = translation_based_on_language(req.translate_to, line)
             fulltext += res + "\n"
         
-        # fulltext = fulltext.replace("?", "?\n")
-        print(fulltext)
         return JSONResponse(content=jsonable_encoder(fulltext))
     else:
         return JSONResponse(content=jsonable_encoder(translation_based_on_language(req.translate_to, req.input)))

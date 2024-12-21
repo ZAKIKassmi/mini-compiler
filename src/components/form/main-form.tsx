@@ -4,7 +4,7 @@ import { useForm } from "react-hook-form";
 import { Form, FormControl, FormField, FormItem } from "../ui/form";
 import { Input } from "../ui/input";
 import { Button } from "../ui/button";
-import { SendHorizontal } from "lucide-react";
+import { ExternalLink, SendHorizontal, X } from "lucide-react";
 import {
   Select,
   SelectContent,
@@ -19,6 +19,19 @@ import { useEffect, useState } from "react";
 import { Textarea } from "../ui/textarea";
 import { TextGenerateEffect } from "../ui/text-generate-effect";
 import { ScrollArea } from "../ui/scroll-area";
+
+import {
+  Drawer,
+  DrawerClose,
+  DrawerContent,
+  DrawerDescription,
+  DrawerHeader,
+  DrawerTitle,
+  DrawerTrigger,
+} from "@/components/ui/drawer";
+import Image from "next/image";
+import { Separator } from "../ui/separator";
+import Link from "next/link";
 
 type DataType = {
   value: string;
@@ -36,7 +49,8 @@ export function MainForm() {
   const { toast } = useToast();
   const [isTextArea, setIsTextArea] = useState(false);
   const [value, setValue] = useState("1");
-  const [isTranslationVisible, setIsTranslationVisible] = useState<boolean>(false);
+  const [isTranslationVisible, setIsTranslationVisible] =
+    useState<boolean>(false);
   const [translationContent, setTranslationContent] = useState<string>("");
   const [showAnimation, setShowAnimation] = useState(false);
 
@@ -53,7 +67,7 @@ export function MainForm() {
     defaultValues: {
       value: "",
       selectValue: "1",
-      language: "en"
+      language: "en",
     },
   });
 
@@ -72,11 +86,11 @@ export function MainForm() {
             is_textarea: isTextArea,
           }
         );
-        
+
         if (data.is_error) {
           toast({
             title: data.message,
-            description: data.bayt,
+            description: `Found in: ${data.bayt}`,
             variant: "destructive",
           });
         } else {
@@ -97,10 +111,10 @@ export function MainForm() {
           setTranslationContent(data);
           setShowAnimation(false);
           requestAnimationFrame(() => setShowAnimation(true));
-        } catch(e) {
+        } catch (e) {
           toast({
             title: `${e}`,
-            variant: "destructive"
+            variant: "destructive",
           });
         }
         break;
@@ -110,7 +124,7 @@ export function MainForm() {
   }
 
   return (
-    <div className="max-w-[30rem] w-full flex">
+    <div className="max-w-[30rem] w-full flex flex-col gap-4">
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit)}
@@ -197,11 +211,85 @@ export function MainForm() {
           </div>
         </form>
       </Form>
-      
+
+      <Drawer>
+        <DrawerTrigger className="text-muted-foreground text-sm underline hover:text-white/75 duration-200">
+          Show more information
+        </DrawerTrigger>
+        <DrawerContent className="min-h-[75%]">
+          <DrawerHeader>
+            <DrawerTitle>
+              Abu at-Tayyib Ahmad ibn al-Husayn al-Mutanabbi al-Kindi
+            </DrawerTitle>
+            <DrawerDescription>Abbasid poet</DrawerDescription>
+          </DrawerHeader>
+          <DrawerClose className="absolute right-4 top-4">
+            <Button variant="ghost">
+              <X />
+            </Button>
+          </DrawerClose>
+
+          <div className="size-full px-24 flex gap-6 mt-8">
+            <div className="w-1/5 aspect-[1/1.21] rounded-xl bg-white overflow-hidden">
+              <Image
+                src="/moutanabi.jpg"
+                width={1000}
+                height={1000}
+                alt="moutanabi image"
+              />
+            </div>
+            <div className="w-2/5">
+              <p className="text-black/95 dark:text-white/95">
+                <span className="min-w-12 inline-block">
+                  Born:
+                </span>
+                <span className="text-muted-foreground">Kufa, Iraq</span>
+              </p>
+              <p className="text-black/95 dark:text-white/95">
+                <span className="min-w-12 inline-block">
+                  Died:
+                </span>
+                <span className="text-muted-foreground">
+                  September 23, 965 AD, Numaniyah, Iraq
+                </span>
+              </p>
+              <p className="text-black/95 dark:text-white/95">
+                <span className="min-w-12 inline-block">
+                  Era:
+                </span>
+                <span className="text-muted-foreground">
+                  Islamic Golden Age
+                </span>
+              </p>
+                <Separator className="my-4"/>
+              <div>
+                <p>
+                  <span className="text-muted-foreground">
+                Abū al-Ṭayyib Aḥmad ibn al-Ḥusayn al-Mutanabbī al-Kindī from Kufa, Abbasid Caliphate, was a famous Abbasid-era Arabian poet at the court of the Hamdanid emir Sayf al-Dawla in Aleppo, and for whom he composed 300 folios of poetry. 
+                  </span>
+                <Link href="https://en.wikipedia.org/wiki/Al-Mutanabbi" target="_blank" className="text-blue-400">
+                  <ExternalLink className="w-4 pb-1 ml-1 inline"/>
+                </Link>
+                </p>
+                
+              </div>
+
+            </div>
+              <div className="w-2/5 rounded-xl">
+                <iframe src="https://www.youtube.com/embed/SWgu48f2rxk" allowFullScreen  className="w-full aspect-video"></iframe>
+              </div>
+          </div>
+        </DrawerContent>
+      </Drawer>
+
       {isTranslationVisible && showAnimation && translationContent && (
         <div className="mt-4 absolute right-4 top-12 h-[90vh] w-[30%] border-white/15 border rounded-xl p-4 bg-[#121212]">
           <ScrollArea className="w-full h-full">
-          <TextGenerateEffect duration={2} filter={false} words={translationContent} />
+            <TextGenerateEffect
+              duration={2}
+              filter={false}
+              words={translationContent}
+            />
           </ScrollArea>
         </div>
       )}

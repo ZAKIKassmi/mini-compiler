@@ -131,27 +131,23 @@ def analyze_semantic(proverb_input):
         return {
             "is_error":True,
             "message": "Lexical error: Sentence contains unknown token.",
-            "bayt":""
         }
     elif not any(token_types == order[:len(token_types)] for order in valid_order):
 
         return {
             "is_error":True,
             "message":"Syntax error: Invalid token order.",
-            "bayt":token_types
         }
     elif token_values in bayts:
 
         return {
             "is_error":False,
             "message":"Verification Result: Valid phrase.",
-            "bayt":bayts[token_values]
         }
         
     else:
         return {
             "is_error":True,
             "message":"Semantic Analyzer problem",
-            "bayt":token_values
         }
         

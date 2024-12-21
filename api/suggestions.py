@@ -13,7 +13,7 @@ class Suggestion:
         except FileNotFoundError:
             raise FileNotFoundError(f"The file {self.dictionary_file} was not found.")
     
-    def sugget(self, bayt):
+    def suggest(self, bayt):
         """
         Suggest the closest bayt from the dictionary and its accuracy.
 
@@ -23,12 +23,18 @@ class Suggestion:
         if not self.bayts:
             raise ValueError("The dictionary is empty or not loaded properly.")
 
-        # Use difflib for similarity matching
         closest_match = difflib.get_close_matches(bayt, self.bayts, n=1, cutoff=0)
         if closest_match:
-            # Calculate accuracy score as a rough similarity ratio
             closest_bayt = closest_match[0]
             accuracy = difflib.SequenceMatcher(None, bayt, closest_bayt).ratio()
-            return closest_bayt, accuracy
+            return {
+                "message": closest_bayt,
+                "accuracy": accuracy,
+                "is_found": True
+            }
         else:
-            return "No close match found", 0.0
+            return {
+                "message": "no close match found",
+                "accuracy": "0.0",
+                "is_found": False
+            }
