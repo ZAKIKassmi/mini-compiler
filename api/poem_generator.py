@@ -15,7 +15,6 @@ class PoemGenerator:
 
     def generate_poem(self, theme):
         """Generate a poem based on the given theme."""
-        theme = theme.lower()  # Convert theme to lowercase for consistency
         if theme in self.poems:
             # Randomly select a poem under the given theme
             return random.choice(self.poems[theme])

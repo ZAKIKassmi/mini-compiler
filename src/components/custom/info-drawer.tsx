@@ -8,17 +8,17 @@ import { X, ExternalLink } from 'lucide-react';
 
 type inforDrawerProps = {
   triggerText?:"Show more information";
-  title:string;
-  imageSrc:string;
-  imageAlt:string;
-  metadata: {
-    born: string,
-    died: string,
+  title?:string;
+  imageSrc?:string;
+  imageAlt?:string;
+  metadata?: {
+    born?: string,
+    died?: string,
     era?: string,
   }
-  biographyText: string;
-  biographyLink: string;
-  videoUrl: string;
+  biographyText?: string;
+  biographyLink?: string;
+  videoUrl?: string;
 }
 
 const InfoDrawer = ({
@@ -49,12 +49,12 @@ const InfoDrawer = ({
         <div className="size-full flex gap-6 mt-8">
           {/* Image Section */}
           <div className="w-1/5 aspect-[1/1.21] rounded-xl bg-white overflow-hidden">
-            <Image src={imageSrc} width={1000} height={1000} alt={imageAlt} />
+            <Image src={imageSrc || ""} width={1000} height={1000} alt={imageAlt || "image of"} />
           </div>
 
           {/* Metadata and Biography Section */}
           <div className="w-2/5">
-            {Object.entries(metadata).map(([key, value]) => (
+            {metadata && Object.entries(metadata).map(([key, value]) => (
               <p key={key} className="text-black/95 dark:text-white/95">
                 <span className="min-w-12 inline-block capitalize">{key}:</span>
                 <span className="text-muted-foreground">{value}</span>

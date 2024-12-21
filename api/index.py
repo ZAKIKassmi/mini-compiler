@@ -27,6 +27,13 @@ class poemGeneratorRequest(BaseModel):
     input: str
 
 
+class poemGeneratorResponse(BaseModel):
+    nom: str
+    titre: str
+    image: str
+    info:str
+    kassida:str
+
 
 
 def translation_based_on_language(lang:str, input:str):
@@ -73,6 +80,13 @@ async def verify_input_endpoint(proverb: ProverbRequest):
 async def translate_input(req: TranslationRequest) -> TranslationResponse:
         fulltext: str = ""
         lines = req.input.split("\n")
+        if len(req.input) == 0:
+            return JSONResponse(content=jsonable_encoder({
+                "is_error": True,
+                "translation": "Please enter a sentence",
+                "bayt": "input length must be bigger than 0",
+                "closest_match": ""
+            }))
         for line in lines:
             line = line.strip()
             if not line:
@@ -110,5 +124,7 @@ async def generate_poems(req: poemGeneratorRequest):
     input = req.input
     generator = PoemGenerator()
     res = generator.generate_poem(input)
+    return JSONResponse(content=jsonable_encoder(res))
+
     
 
