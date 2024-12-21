@@ -12,15 +12,15 @@ app = FastAPI()
 
 class ProverbRequest(BaseModel):
     proverb_input: str
-    is_textarea: bool
 
 class TranslationRequest(BaseModel):
     input: str
-    is_textarea: bool
     translate_to: str
 
 class TranslationResponse(BaseModel):
     translation: str
+    is_error: bool
+    bayt: str
 
 
 
@@ -43,34 +43,30 @@ async def verify_input_endpoint(proverb: ProverbRequest):
           "is_error": True,
           "message": "Please enter a sentence",
           "bayt": "input length must be bigger than 0"
-      }))
-    if proverb.is_textarea:
-      lines = proverb.proverb_input.split("\n")
-      for line in lines:
-          line = line.strip()
-          if not line:
-              continue
-          res = analyze_semantic(line)
-          if res["is_error"]:
-              return JSONResponse(content=jsonable_encoder({
-                  "is_error": True,
-                  "message": res["message"],
-                  "bayt": line
-              }))
-      
-      # If no errors found, return success
-      return JSONResponse(content=jsonable_encoder({
-          "is_error": False,
-          "message": "Verification Result: Valid phrase.",
-          "bayt": "All sentences are correct"
-      }))
-    else:
-      return  JSONResponse(content=jsonable_encoder(analyze_semantic(proverb.proverb_input)))
+        }))
+    lines = proverb.proverb_input.split("\n")
+    for line in lines:
+        line = line.strip()
+        if not line:
+            continue
+        res = analyze_semantic(line)
+        if res["is_error"]:
+            return JSONResponse(content=jsonable_encoder({
+                "is_error": True,
+                "message": res["message"],
+                "bayt": line
+            }))
+    
+    # If no errors found, return success
+    return JSONResponse(content=jsonable_encoder({
+        "is_error": False,
+        "message": "Verification Result: Valid phrase.",
+        "bayt": "All sentences are correct"
+    }))
     
     
 @app.post("/api/py/translation")
 async def translate_input(req: TranslationRequest) -> TranslationResponse:
-    if req.is_textarea:
         fulltext: str = ""
         lines = req.input.split("\n")
         for line in lines:
@@ -79,12 +75,18 @@ async def translate_input(req: TranslationRequest) -> TranslationResponse:
                 continue
             compiler_verification = analyze_semantic(line)
             if compiler_verification["is_error"]:
-                return 
+                return JSONResponse(content=jsonable_encoder({
+                    "is_error": True,
+                    "translation": compiler_verification["message"],
+                    "bayt": line
+                }))
             res = translation_based_on_language(req.translate_to, line)
             fulltext += res + "\n"
-        
-        return JSONResponse(content=jsonable_encoder(fulltext))
-    else:
-        return JSONResponse(content=jsonable_encoder(translation_based_on_language(req.translate_to, req.input)))
+        return JSONResponse(content=jsonable_encoder({
+            "is_error": False,
+            "translation": fulltext,
+            "bayt": ""
+        }))
+
 
 

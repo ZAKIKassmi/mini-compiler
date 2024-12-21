@@ -2,7 +2,6 @@
 
 import { useForm } from "react-hook-form";
 import { Form, FormControl, FormField, FormItem } from "../ui/form";
-import { Input } from "../ui/input";
 import { Button } from "../ui/button";
 import { ExternalLink, SendHorizontal, X } from "lucide-react";
 import {
@@ -47,7 +46,6 @@ type responseType = {
 
 export function MainForm() {
   const { toast } = useToast();
-  const [isTextArea, setIsTextArea] = useState(false);
   const [value, setValue] = useState("1");
   const [isTranslationVisible, setIsTranslationVisible] =
     useState<boolean>(false);
@@ -83,7 +81,6 @@ export function MainForm() {
           `${URL}/py/verify_input`,
           {
             proverb_input: value,
-            is_textarea: isTextArea,
           }
         );
 
@@ -105,12 +102,20 @@ export function MainForm() {
         try {
           const { data } = await axios.post(`${URL}/py/translation`, {
             input: value,
-            is_textarea: isTextArea,
             translate_to: language,
           });
-          setTranslationContent(data);
-          setShowAnimation(false);
-          requestAnimationFrame(() => setShowAnimation(true));
+          if(data.is_error){
+            toast({
+              title: data.translation,
+              variant: "destructive",
+              description: `Found: ${data.bayt}`
+            })
+          }
+          else{
+            setTranslationContent(data.translation);
+            setShowAnimation(false);
+            requestAnimationFrame(() => setShowAnimation(true));
+          }
         } catch (e) {
           toast({
             title: `${e}`,
@@ -136,11 +141,7 @@ export function MainForm() {
             render={({ field }) => (
               <FormItem className="w-full">
                 <FormControl>
-                  {isTextArea ? (
-                    <Textarea placeholder="Anything in your mind?" {...field} />
-                  ) : (
-                    <Input placeholder="Anything in your mind?" {...field} />
-                  )}
+                    <Textarea rows={6} placeholder="Anything in your mind?" {...field} />                  
                 </FormControl>
               </FormItem>
             )}
@@ -198,13 +199,6 @@ export function MainForm() {
                 )}
               />
             )}
-            <Button
-              className="min-w-[120px]"
-              type="button"
-              onClick={() => setIsTextArea(!isTextArea)}
-            >
-              {isTextArea ? "One line" : "Multiple lines"}
-            </Button>
             <Button type="submit">
               <SendHorizontal />
             </Button>
