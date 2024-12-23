@@ -6,6 +6,7 @@ from fastapi.encoders import jsonable_encoder
 from translation import Translation
 from suggestions import Suggestion
 from poem_generator import PoemGenerator
+from generate_audio import generate_speech
 # Initialize FastAPI app
 app = FastAPI()
 
@@ -78,6 +79,7 @@ async def verify_input_endpoint(proverb: ProverbRequest):
                     "bayt": line,
                     "closest_match": ""
                 }))
+    
     
     # If no errors found, return success
     return JSONResponse(content=jsonable_encoder({

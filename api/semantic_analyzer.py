@@ -148,6 +148,6 @@ def analyze_semantic(proverb_input):
     else:
         return {
             "is_error":True,
-            "message":"Semantic Analyzer problem",
+            "message":"Semantic error: it does not make sense",
         }
         
