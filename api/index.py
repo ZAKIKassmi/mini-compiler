@@ -62,11 +62,22 @@ async def verify_input_endpoint(proverb: ProverbRequest):
             continue
         res = analyze_semantic(line)
         if res["is_error"]:
-            return JSONResponse(content=jsonable_encoder({
-                "is_error": True,
-                "message": res["message"],
-                "bayt": line
-            }))
+            suggestion = Suggestion()
+            suggestion_result = suggestion.suggest(line)
+            if suggestion_result["is_found"] and suggestion_result["accuracy"] > 0:
+                return JSONResponse(content=jsonable_encoder({
+                    "is_error": True,
+                    "message": res["message"],
+                    "bayt": line,
+                    "closest_match": suggestion_result["message"]
+                }))
+            else:
+                return JSONResponse(content=jsonable_encoder({
+                    "is_error": True,
+                    "message": res["message"],
+                    "bayt": line,
+                    "closest_match": ""
+                }))
     
     # If no errors found, return success
     return JSONResponse(content=jsonable_encoder({
@@ -95,7 +106,6 @@ async def translate_input(req: TranslationRequest) -> TranslationResponse:
             if compiler_verification["is_error"]:
                 suggestion = Suggestion()
                 suggestion_result = suggestion.suggest(line)
-                print(suggestion_result["accuracy"])
                 if suggestion_result["is_found"] and suggestion_result["accuracy"] > 0:
                     return JSONResponse(content=jsonable_encoder({
                         "is_error": True,

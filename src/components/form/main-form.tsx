@@ -40,6 +40,7 @@ type responseType = {
   is_error: boolean;
   message: string;
   bayt: string;
+  closest_match:string;
 };
 
 type PoetData = {
@@ -62,7 +63,7 @@ export function MainForm() {
     useState<boolean>(false);
   const [translationContent, setTranslationContent] = useState<string>("");
   const [showAnimation, setShowAnimation] = useState(false);
-  const [closestMatch, setClosesMatch] = useState(null);
+  const [closestMatch, setClosesMatch] = useState<string | null>(null);
   const [isOk, setIsOk] = useState(false);
   const [isSuggestion, setIsSuggestion] = useState(false);
   const [poetData, setPoetData] = useState<PoetData | null>(null);
@@ -99,11 +100,11 @@ export function MainForm() {
     const isSuggestion = value === "3";
     setIsSuggestion(isSuggestion);
     setIsTranslationVisible(isTranslation);
-    if (!isTranslation) {
-      setShowAnimation(false);
-      setTranslationContent("");
-      setClosesMatch(null);
-    }
+    
+    setShowAnimation(false);
+    setTranslationContent("");
+    setClosesMatch(null);
+    
     setIsOk(false);
   }, [value]);
 
@@ -139,12 +140,16 @@ export function MainForm() {
               variant: "destructive",
             });
             setIsOk(false);
+            if (data.closest_match.length > 0) {
+              setClosesMatch(data.closest_match);
+            }
           } else {
             toast({
               title: data.message,
               description: data.bayt,
               variant: "default",
             });
+            setClosesMatch(null);
             setIsOk(true);
           }
         } catch (e) {
@@ -351,7 +356,7 @@ export function MainForm() {
         </Form>
 
         <AnimatePresence>
-          {closestMatch && isTranslationVisible && (
+          {closestMatch && (
             <motion.div
               layout
               initial={{ opacity: 0, y: -20 }}
@@ -378,6 +383,7 @@ export function MainForm() {
                 className="h-[90vh] w-full dark:border-white/15 border rounded-xl p-4 dark:bg-[#121212] text-black/50 border-black/5 "
               >
                   <TextGenerateEffect
+                    key={translationContent}
                     duration={2}
                     filter={false}
                     words={translationContent}
@@ -404,7 +410,7 @@ export function MainForm() {
               imageAlt="moutananbu image"
               biographyLink="https://en.wikipedia.org/wiki/Al-Mutanabbi"
               biographyText="Abū al-Ṭayyib Aḥmad ibn al-Ḥusayn al-Mutanabbī al-Kindī from Kufa, Abbasid Caliphate, was a famous Abbasid-era Arabian poet at the court of the Hamdanid emir Sayf al-Dawla in Aleppo, and for whom he composed 300 folios of poetry."
-              videoUrl="https://www.youtube.com/embed/SWgu48f2rxk"
+              videoUrl="https://www.youtube.com/embed/SWgu48f2rxk?start=863&autoplay=1"
               metadata={{
                 born: "Kufa, Iraq",
                 died: "September 23, 965 AD, Numaniyah, Iraq",
