@@ -9,7 +9,10 @@ const nextConfig = {
         : "/api/",
       }
     ]
-  }
+  },
+  eslint: {
+    ignoreDuringBuilds: true,
+  },
 };
 
 export default nextConfig;

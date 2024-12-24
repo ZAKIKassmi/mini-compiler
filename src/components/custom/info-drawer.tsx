@@ -1,5 +1,5 @@
 import React from 'react';
-import { Drawer, DrawerTrigger, DrawerContent, DrawerHeader, DrawerTitle, DrawerDescription, DrawerClose } from '../ui/drawer'; // Assuming these components are custom-built or from a library
+import { Drawer, DrawerTrigger, DrawerContent, DrawerHeader, DrawerTitle, DrawerClose } from '../ui/drawer'; // Assuming these components are custom-built or from a library
 import { Button } from '../ui/button';
 import { Separator } from '../ui/separator';
 import Image from 'next/image';

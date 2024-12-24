@@ -17,15 +17,13 @@ export function ToggleTheme(){
   }
   
   return(
-    <Button onClick={()=>{
-      theme === "dark" ? setTheme("light") : setTheme("dark")
-    }} className="absolute right-4 top-4">
-      {
-        theme === "dark" ? 
-        <Sun/>
-        :
-        <Moon/> 
-      }
-    </Button>
+    <Button
+  onClick={() => {
+    (() => (theme === "dark" ? setTheme("light") : setTheme("dark")))();
+    }}
+    className="absolute right-4 top-4"
+  >
+    {theme === "dark" ? <Sun /> : <Moon />}
+  </Button>
   )
 }

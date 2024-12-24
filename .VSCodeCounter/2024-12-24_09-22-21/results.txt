@@ -1,0 +1,92 @@
+Date : 2024-12-24 09:22:21
+Directory : d:\compilation
+Total : 47 files,  9376 codes, 31 comments, 338 blanks, all 9745 lines
+
+Languages
++--------------------+------------+------------+------------+------------+------------+
+| language           | files      | code       | comment    | blank      | total      |
++--------------------+------------+------------+------------+------------+------------+
+| JSON               |          7 |      6,700 |          0 |          7 |      6,707 |
+| TypeScript JSX     |         22 |      1,791 |          7 |        196 |      1,994 |
+| Python             |          9 |        531 |         19 |         86 |        636 |
+| TypeScript         |          4 |        232 |          3 |         38 |        273 |
+| PostCSS            |          1 |         74 |          0 |          5 |         79 |
+| JSON with Comments |          1 |         26 |          0 |          1 |         27 |
+| JavaScript         |          2 |         22 |          2 |          4 |         28 |
+| Markdown           |          1 |          0 |          0 |          1 |          1 |
++--------------------+------------+------------+------------+------------+------------+
+
+Directories
++-------------------------------------------------------------+------------+------------+------------+------------+------------+
+| path                                                        | files      | code       | comment    | blank      | total      |
++-------------------------------------------------------------+------------+------------+------------+------------+------------+
+| .                                                           |         47 |      9,376 |         31 |        338 |      9,745 |
+| . (Files)                                                   |          9 |      6,575 |          2 |         11 |      6,588 |
+| api                                                         |         12 |        766 |         19 |         90 |        875 |
+| api (Files)                                                 |          9 |        531 |         19 |         86 |        636 |
+| api\data                                                    |          3 |        235 |          0 |          4 |        239 |
+| src                                                         |         26 |      2,035 |         10 |        237 |      2,282 |
+| src\app                                                     |          3 |        130 |          0 |         12 |        142 |
+| src\components                                              |         20 |      1,735 |          7 |        189 |      1,931 |
+| src\components\custom                                       |          2 |        106 |          3 |         11 |        120 |
+| src\components\form                                         |          1 |        450 |          0 |         38 |        488 |
+| src\components\theme                                        |          2 |         34 |          0 |          7 |         41 |
+| src\components\ui                                           |         15 |      1,145 |          4 |        133 |      1,282 |
+| src\hooks                                                   |          1 |        160 |          3 |         32 |        195 |
+| src\lib                                                     |          1 |          5 |          0 |          2 |          7 |
+| src\utils                                                   |          1 |          5 |          0 |          2 |          7 |
++-------------------------------------------------------------+------------+------------+------------+------------+------------+
+
+Files
++-------------------------------------------------------------+--------------------+------------+------------+------------+------------+
+| filename                                                    | language           | code       | comment    | blank      | total      |
++-------------------------------------------------------------+--------------------+------------+------------+------------+------------+
+| d:\compilation\.eslintrc.json                               | JSON               |          3 |          0 |          1 |          4 |
+| d:\compilation\README.md                                    | Markdown           |          0 |          0 |          1 |          1 |
+| d:\compilation\api\data\poems.json                          | JSON               |        131 |          0 |          3 |        134 |
+| d:\compilation\api\data\translation_english.json            | JSON               |         52 |          0 |          1 |         53 |
+| d:\compilation\api\data\translation_french.json             | JSON               |         52 |          0 |          0 |         52 |
+| d:\compilation\api\generate_audio.py                        | Python             |          8 |          0 |          5 |         13 |
+| d:\compilation\api\index.py                                 | Python             |        118 |          3 |         22 |        143 |
+| d:\compilation\api\parsetab.py                              | Python             |         65 |          3 |          8 |         76 |
+| d:\compilation\api\poem_generator.py                        | Python             |         18 |          2 |          2 |         22 |
+| d:\compilation\api\rules.py                                 | Python             |         93 |          4 |         15 |        112 |
+| d:\compilation\api\semantic_analyzer.py                     | Python             |        131 |          6 |         16 |        153 |
+| d:\compilation\api\suggestions.py                           | Python             |         35 |          0 |          5 |         40 |
+| d:\compilation\api\translation.py                           | Python             |         30 |          0 |          4 |         34 |
+| d:\compilation\api\unit_test.py                             | Python             |         33 |          1 |          9 |         43 |
+| d:\compilation\components.json                              | JSON               |         21 |          0 |          0 |         21 |
+| d:\compilation\next.config.mjs                              | JavaScript         |         16 |          1 |          2 |         19 |
+| d:\compilation\package-lock.json                            | JSON               |      6,393 |          0 |          1 |      6,394 |
+| d:\compilation\package.json                                 | JSON               |         48 |          0 |          1 |         49 |
+| d:\compilation\postcss.config.mjs                           | JavaScript         |          6 |          1 |          2 |          9 |
+| d:\compilation\src\app\globals.css                          | PostCSS            |         74 |          0 |          5 |         79 |
+| d:\compilation\src\app\layout.tsx                           | TypeScript JSX     |         44 |          0 |          4 |         48 |
+| d:\compilation\src\app\page.tsx                             | TypeScript JSX     |         12 |          0 |          3 |         15 |
+| d:\compilation\src\components\custom\custom-type-writer.tsx | TypeScript JSX     |         19 |          0 |          4 |         23 |
+| d:\compilation\src\components\custom\info-drawer.tsx        | TypeScript JSX     |         87 |          3 |          7 |         97 |
+| d:\compilation\src\components\form\main-form.tsx            | TypeScript JSX     |        450 |          0 |         38 |        488 |
+| d:\compilation\src\components\theme\theme-provider.tsx      | TypeScript JSX     |          9 |          0 |          3 |         12 |
+| d:\compilation\src\components\theme\toggle-theme.tsx        | TypeScript JSX     |         25 |          0 |          4 |         29 |
+| d:\compilation\src\components\ui\button.tsx                 | TypeScript JSX     |         52 |          0 |          6 |         58 |
+| d:\compilation\src\components\ui\drawer.tsx                 | TypeScript JSX     |        105 |          0 |         14 |        119 |
+| d:\compilation\src\components\ui\form.tsx                   | TypeScript JSX     |        153 |          0 |         26 |        179 |
+| d:\compilation\src\components\ui\input.tsx                  | TypeScript JSX     |         19 |          0 |          4 |         23 |
+| d:\compilation\src\components\ui\label.tsx                  | TypeScript JSX     |         21 |          0 |          6 |         27 |
+| d:\compilation\src\components\ui\resizable.tsx              | TypeScript JSX     |         39 |          0 |          7 |         46 |
+| d:\compilation\src\components\ui\scroll-area.tsx            | TypeScript JSX     |         43 |          0 |          6 |         49 |
+| d:\compilation\src\components\ui\select.tsx                 | TypeScript JSX     |        146 |          0 |         14 |        160 |
+| d:\compilation\src\components\ui\separator.tsx              | TypeScript JSX     |         27 |          0 |          5 |         32 |
+| d:\compilation\src\components\ui\text-generate-effect.tsx   | TypeScript JSX     |         71 |          1 |          7 |         79 |
+| d:\compilation\src\components\ui\textarea.tsx               | TypeScript JSX     |         19 |          0 |          4 |         23 |
+| d:\compilation\src\components\ui\toast.tsx                  | TypeScript JSX     |        116 |          0 |         14 |        130 |
+| d:\compilation\src\components\ui\toaster.tsx                | TypeScript JSX     |         32 |          0 |          4 |         36 |
+| d:\compilation\src\components\ui\typewriter-effect.tsx      | TypeScript JSX     |        178 |          2 |          8 |        188 |
+| d:\compilation\src\components\ui\wavy-background.tsx        | TypeScript JSX     |        124 |          1 |          8 |        133 |
+| d:\compilation\src\hooks\use-toast.ts                       | TypeScript         |        160 |          3 |         32 |        195 |
+| d:\compilation\src\lib\utils.ts                             | TypeScript         |          5 |          0 |          2 |          7 |
+| d:\compilation\src\utils\getURL.ts                          | TypeScript         |          5 |          0 |          2 |          7 |
+| d:\compilation\tailwind.config.ts                           | TypeScript         |         62 |          0 |          2 |         64 |
+| d:\compilation\tsconfig.json                                | JSON with Comments |         26 |          0 |          1 |         27 |
+| Total                                                       |                    |      9,376 |         31 |        338 |      9,745 |
++-------------------------------------------------------------+--------------------+------------+------------+------------+------------+

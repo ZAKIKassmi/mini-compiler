@@ -1,0 +1,49 @@
+"filename", "language", "TypeScript", "JSON", "JavaScript", "JSON with Comments", "Markdown", "Python", "TypeScript JSX", "PostCSS", "comment", "blank", "total"
+"d:\compilation\.eslintrc.json", "JSON", 0, 3, 0, 0, 0, 0, 0, 0, 0, 1, 4
+"d:\compilation\README.md", "Markdown", 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1
+"d:\compilation\api\data\poems.json", "JSON", 0, 131, 0, 0, 0, 0, 0, 0, 0, 3, 134
+"d:\compilation\api\data\translation_english.json", "JSON", 0, 52, 0, 0, 0, 0, 0, 0, 0, 1, 53
+"d:\compilation\api\data\translation_french.json", "JSON", 0, 52, 0, 0, 0, 0, 0, 0, 0, 0, 52
+"d:\compilation\api\generate_audio.py", "Python", 0, 0, 0, 0, 0, 8, 0, 0, 0, 5, 13
+"d:\compilation\api\index.py", "Python", 0, 0, 0, 0, 0, 118, 0, 0, 3, 22, 143
+"d:\compilation\api\parsetab.py", "Python", 0, 0, 0, 0, 0, 65, 0, 0, 3, 8, 76
+"d:\compilation\api\poem_generator.py", "Python", 0, 0, 0, 0, 0, 18, 0, 0, 2, 2, 22
+"d:\compilation\api\rules.py", "Python", 0, 0, 0, 0, 0, 93, 0, 0, 4, 15, 112
+"d:\compilation\api\semantic_analyzer.py", "Python", 0, 0, 0, 0, 0, 131, 0, 0, 6, 16, 153
+"d:\compilation\api\suggestions.py", "Python", 0, 0, 0, 0, 0, 35, 0, 0, 0, 5, 40
+"d:\compilation\api\translation.py", "Python", 0, 0, 0, 0, 0, 30, 0, 0, 0, 4, 34
+"d:\compilation\api\unit_test.py", "Python", 0, 0, 0, 0, 0, 33, 0, 0, 1, 9, 43
+"d:\compilation\components.json", "JSON", 0, 21, 0, 0, 0, 0, 0, 0, 0, 0, 21
+"d:\compilation\next.config.mjs", "JavaScript", 0, 0, 16, 0, 0, 0, 0, 0, 1, 2, 19
+"d:\compilation\package-lock.json", "JSON", 0, 6393, 0, 0, 0, 0, 0, 0, 0, 1, 6394
+"d:\compilation\package.json", "JSON", 0, 48, 0, 0, 0, 0, 0, 0, 0, 1, 49
+"d:\compilation\postcss.config.mjs", "JavaScript", 0, 0, 6, 0, 0, 0, 0, 0, 1, 2, 9
+"d:\compilation\src\app\globals.css", "PostCSS", 0, 0, 0, 0, 0, 0, 0, 74, 0, 5, 79
+"d:\compilation\src\app\layout.tsx", "TypeScript JSX", 0, 0, 0, 0, 0, 0, 44, 0, 0, 4, 48
+"d:\compilation\src\app\page.tsx", "TypeScript JSX", 0, 0, 0, 0, 0, 0, 12, 0, 0, 3, 15
+"d:\compilation\src\components\custom\custom-type-writer.tsx", "TypeScript JSX", 0, 0, 0, 0, 0, 0, 19, 0, 0, 4, 23
+"d:\compilation\src\components\custom\info-drawer.tsx", "TypeScript JSX", 0, 0, 0, 0, 0, 0, 87, 0, 3, 7, 97
+"d:\compilation\src\components\form\main-form.tsx", "TypeScript JSX", 0, 0, 0, 0, 0, 0, 450, 0, 0, 38, 488
+"d:\compilation\src\components\theme\theme-provider.tsx", "TypeScript JSX", 0, 0, 0, 0, 0, 0, 9, 0, 0, 3, 12
+"d:\compilation\src\components\theme\toggle-theme.tsx", "TypeScript JSX", 0, 0, 0, 0, 0, 0, 25, 0, 0, 4, 29
+"d:\compilation\src\components\ui\button.tsx", "TypeScript JSX", 0, 0, 0, 0, 0, 0, 52, 0, 0, 6, 58
+"d:\compilation\src\components\ui\drawer.tsx", "TypeScript JSX", 0, 0, 0, 0, 0, 0, 105, 0, 0, 14, 119
+"d:\compilation\src\components\ui\form.tsx", "TypeScript JSX", 0, 0, 0, 0, 0, 0, 153, 0, 0, 26, 179
+"d:\compilation\src\components\ui\input.tsx", "TypeScript JSX", 0, 0, 0, 0, 0, 0, 19, 0, 0, 4, 23
+"d:\compilation\src\components\ui\label.tsx", "TypeScript JSX", 0, 0, 0, 0, 0, 0, 21, 0, 0, 6, 27
+"d:\compilation\src\components\ui\resizable.tsx", "TypeScript JSX", 0, 0, 0, 0, 0, 0, 39, 0, 0, 7, 46
+"d:\compilation\src\components\ui\scroll-area.tsx", "TypeScript JSX", 0, 0, 0, 0, 0, 0, 43, 0, 0, 6, 49
+"d:\compilation\src\components\ui\select.tsx", "TypeScript JSX", 0, 0, 0, 0, 0, 0, 146, 0, 0, 14, 160
+"d:\compilation\src\components\ui\separator.tsx", "TypeScript JSX", 0, 0, 0, 0, 0, 0, 27, 0, 0, 5, 32
+"d:\compilation\src\components\ui\text-generate-effect.tsx", "TypeScript JSX", 0, 0, 0, 0, 0, 0, 71, 0, 1, 7, 79
+"d:\compilation\src\components\ui\textarea.tsx", "TypeScript JSX", 0, 0, 0, 0, 0, 0, 19, 0, 0, 4, 23
+"d:\compilation\src\components\ui\toast.tsx", "TypeScript JSX", 0, 0, 0, 0, 0, 0, 116, 0, 0, 14, 130
+"d:\compilation\src\components\ui\toaster.tsx", "TypeScript JSX", 0, 0, 0, 0, 0, 0, 32, 0, 0, 4, 36
+"d:\compilation\src\components\ui\typewriter-effect.tsx", "TypeScript JSX", 0, 0, 0, 0, 0, 0, 178, 0, 2, 8, 188
+"d:\compilation\src\components\ui\wavy-background.tsx", "TypeScript JSX", 0, 0, 0, 0, 0, 0, 124, 0, 1, 8, 133
+"d:\compilation\src\hooks\use-toast.ts", "TypeScript", 160, 0, 0, 0, 0, 0, 0, 0, 3, 32, 195
+"d:\compilation\src\lib\utils.ts", "TypeScript", 5, 0, 0, 0, 0, 0, 0, 0, 0, 2, 7
+"d:\compilation\src\utils\getURL.ts", "TypeScript", 5, 0, 0, 0, 0, 0, 0, 0, 0, 2, 7
+"d:\compilation\tailwind.config.ts", "TypeScript", 62, 0, 0, 0, 0, 0, 0, 0, 0, 2, 64
+"d:\compilation\tsconfig.json", "JSON with Comments", 0, 0, 0, 26, 0, 0, 0, 0, 0, 1, 27
+"Total", "-", 232, 6700, 22, 26, 0, 531, 1791, 74, 31, 338, 9745

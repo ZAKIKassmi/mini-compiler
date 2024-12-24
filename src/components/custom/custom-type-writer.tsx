@@ -1,9 +1,9 @@
 import React from 'react'
 import { TypewriterEffectSmooth } from '../ui/typewriter-effect';
 
-type Props = {}
 
-export default function CustomTypeWriter({}: Props) {
+
+export default function CustomTypeWriter() {
   const words = [
     {
       text: "Welcome,",

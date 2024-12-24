@@ -3,7 +3,7 @@
 import { useForm } from "react-hook-form";
 import { Form, FormControl, FormField, FormItem } from "../ui/form";
 import { Button } from "../ui/button";
-import { ExternalLink, SendHorizontal, X } from "lucide-react";
+import { LoaderCircle, SendHorizontal, X } from "lucide-react";
 import {
   Select,
   SelectContent,
@@ -17,7 +17,6 @@ import { useToast } from "@/hooks/use-toast";
 import { useEffect, useState } from "react";
 import { Textarea } from "../ui/textarea";
 import { TextGenerateEffect } from "../ui/text-generate-effect";
-import { ScrollArea, ScrollBar } from "../ui/scroll-area";
 import { motion, AnimatePresence } from "framer-motion";
 
 import InfoDrawer from "../custom/info-drawer";
@@ -28,10 +27,11 @@ import {
 } from "../ui/drawer";
 import Image from "next/image";
 import { Separator } from "../ui/separator";
+import AudioPlayer from "../custom/audio-player";
 
 type DataType = {
   value: string;
-  selectValue: String;
+  selectValue: string;
   language: "fr" | "en";
   theme: string;
 };
@@ -41,6 +41,7 @@ type responseType = {
   message: string;
   bayt: string;
   closest_match:string;
+  accuracy: number;
 };
 
 type PoetData = {
@@ -49,6 +50,7 @@ type PoetData = {
   image: string;
   titre: string;
   kassida: string;
+  audio: string;
 };
 
 
@@ -68,6 +70,8 @@ export function MainForm() {
   const [isSuggestion, setIsSuggestion] = useState(false);
   const [poetData, setPoetData] = useState<PoetData | null>(null);
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+  const [accuracy, setAccuracy] = useState(0);
+  const [isLoading, setIsLoading] = useState(false);
 
   const PoemDisplay = () => {
     if(poetData == null){
@@ -78,7 +82,7 @@ export function MainForm() {
     
     for (let i = 0; i < lines.length; i += 2) {
       const pair = lines.slice(i, i + 2);
-      pairs.push(pair);
+      pairs.push(pair.reverse());
     }
     
     return (
@@ -122,7 +126,7 @@ export function MainForm() {
     const selectValue = input.selectValue;
     const language = input.language;
     const URL = getURL();
-
+    console.log(URL);
     switch (selectValue) {
       case "1":
         try {
@@ -142,6 +146,9 @@ export function MainForm() {
             setIsOk(false);
             if (data.closest_match.length > 0) {
               setClosesMatch(data.closest_match);
+            }
+            if(data.accuracy != 0){
+              setAccuracy(Number(data.accuracy)*100);
             }
           } else {
             toast({
@@ -175,6 +182,9 @@ export function MainForm() {
             if (data.closest_match.length > 0) {
               setClosesMatch(data.closest_match);
             }
+            if(data.accuracy != 0){
+              setAccuracy(Number(data.accuracy)*100);
+            }
           } else {
             setIsOk(true);
             setClosesMatch(null);
@@ -193,12 +203,14 @@ export function MainForm() {
       case "3":
         const selectedTheme = input.theme;
         try {
+          setIsLoading(true);
           const { data }: { data: PoetData } = await axios.post(
             `${URL}/py/generator`,
             {
               input: selectedTheme,
             }
           );
+          setIsLoading(false);
           setPoetData(data);
           setIsDrawerOpen(true);
         } catch (e) {
@@ -349,14 +361,15 @@ export function MainForm() {
               </AnimatePresence>
 
               <Button type="submit">
-                <SendHorizontal />
+                {isLoading ? <span className="animate-spin"><LoaderCircle/></span> : <SendHorizontal />}
               </Button>
             </div>
           </motion.form>
         </Form>
 
         <AnimatePresence>
-          {closestMatch && (
+          {closestMatch && accuracy>0 && (
+            <>
             <motion.div
               layout
               initial={{ opacity: 0, y: -20 }}
@@ -368,6 +381,19 @@ export function MainForm() {
               <p>Closest match:</p>
               <p className="text-green-500">{closestMatch}</p>
             </motion.div>
+            <motion.div
+              layout
+              initial={{ opacity: 0, y: -20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -20 }}
+              transition={{ duration: 0.3 }}
+              className="flex w-full justify-between text-sm"
+            >
+              <p>Accuracy</p>
+              <p className="text-green-500">{accuracy.toFixed(2)}%</p>
+            </motion.div>
+            </>
+
           )}
         </AnimatePresence>
         <div className="w-[30%] mt-4 absolute right-4 top-12  overflow-hidden">
@@ -458,6 +484,12 @@ export function MainForm() {
                       </span>
                       <span className="min-w-12 inline-block capitalize">
                         : القصيدة
+                      </span>
+                    </p>
+                    <p className="text-black/95 dark:text-white/95 mt-2 ">
+                      <AudioPlayer audio={poetData.audio}/>
+                      <span className="min-w-12 inline-block capitalize">
+                        : استمع
                       </span>
                     </p>
 
